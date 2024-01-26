@@ -13,7 +13,7 @@ export async function getGraphQLData(
 	token: string
 ): Promise<GraphQLResponse> {
 	const octokit = new Octokit({auth: token});
-	return octokit.graphql.paginate(
+	const graphRes = octokit.graphql.paginate(
 		`query userInfo($login: String!, $cursor: String) {
       user(login: $login) {
         name
@@ -60,11 +60,19 @@ export async function getGraphQLData(
           totalCount
         }
       }
+      rateLimit {
+        limit
+        remaining
+        used
+        resetAt
+      }
     }`,
 		{
 			login: username,
 		}
 	);
+	console.debug(graphRes);
+	return graphRes;
 }
 
 export async function getContributionCollection(year: string, token: string) {
@@ -85,6 +93,12 @@ export async function getContributionCollection(year: string, token: string) {
 					Promise<{viewer: {contributionsCollection: ContributionsCollection}}>
 				>(
 					`query {
+            rateLimit {
+              limit
+              remaining
+              used
+              resetAt
+            }
         viewer {
           contributionsCollection(from: "${startYear}", to: "${endYear}") {
             totalCommitContributions
@@ -153,7 +167,7 @@ export async function getContributionCollection(year: string, token: string) {
 		viewer: {contributionsCollection: ContributionsCollection};
 	}[];
 
-	console.log(years);
+	console.debug(years);
 
 	if (years.length === 0) {
 		throw new Error('Failed to fetch data for all years');
