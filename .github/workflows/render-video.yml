@@ -19,9 +19,9 @@ jobs:
       - name: Render video
         run: yarn build
         env:
-          GITHUB_USERNAMES: lukehagar,luke-hagar-sp
-          GITHUB_TOKEN_lukehagar: ${{ secrets.GITHUB_TOKEN_lukehagar }}
-          GITHUB_TOKEN_luke-hagar-sp: ${{ secrets.GITHUB_TOKEN_luke-hagar-sp }}
+          USERNAMES: lukehagar,luke-hagar-sp
+          TOKEN_lukehagar: ${{ secrets.TOKEN_lukehagar }}
+          TOKEN_luke-hagar-sp: ${{ secrets.TOKEN_luke-hagar-sp }}
       - uses: actions/upload-artifact@v3
         with:
           name: stats.gif
