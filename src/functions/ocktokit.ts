@@ -153,6 +153,8 @@ export async function getContributionCollection(year: string, token: string) {
 		viewer: {contributionsCollection: ContributionsCollection};
 	}[];
 
+	console.log(years);
+
 	if (years.length === 0) {
 		throw new Error('Failed to fetch data for all years');
 	}
