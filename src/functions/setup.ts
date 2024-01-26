@@ -9,19 +9,19 @@ export function getUsernamesAndTokens(): {
 	const usernames: string[] = [];
 	const tokenMap = new Map<string, string>();
 
-	if (process.env.GITHUB_USERNAMES) {
-		for (const username of process.env.GITHUB_USERNAMES.split(',')) {
+	if (process.env.USERNAMES) {
+		for (const username of process.env.USERNAMES.split(',')) {
 			usernames.push(username);
 		}
 	} else {
-		usernames.push(process.env.GITHUB_USERNAME!);
+		usernames.push(process.env.USERNAME!);
 	}
 
 	if (usernames.length > 1) {
 		for (const username of usernames) {
 			tokenMap.set(
 				username,
-				process.env[`GITHUB_TOKEN_${username}`] ||
+				process.env[`TOKEN_${username.replace('-', '')}`] ||
 					process.env.GITHUB_TOKEN ||
 					''
 			);
