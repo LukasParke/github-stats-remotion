@@ -19,12 +19,12 @@ export function getUsernamesAndTokens(): {
 
 	if (usernames.length > 1) {
 		for (const username of usernames) {
-			tokenMap.set(
-				username,
-				process.env[`TOKEN_${username.replace('-', '')}`] ||
-					process.env.GITHUB_TOKEN ||
-					''
-			);
+			const userNameToCheck = username.replaceAll('-', '');
+			const token = process.env[`TOKEN_${userNameToCheck}`];
+			if (!token) {
+				throw new Error(`Token for ${userNameToCheck} is missing`);
+			}
+			tokenMap.set(username, token);
 		}
 	}
 
