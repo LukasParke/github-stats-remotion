@@ -1,8 +1,8 @@
 on:
-  #push:
-    #branches: [master]
-  #schedule:
-   # - cron: "0 * * * *"
+  push:
+    branches: [master]
+  schedule:
+    - cron: "0 0 * * *"
 workflow_dispatch:
 
 name: Render video
@@ -20,8 +20,8 @@ jobs:
         run: yarn build
         env:
           USERNAMES: lukehagar,luke-hagar-sp
-          TOKEN_lukehagar: ${{ secrets.TOKEN_lukehagar }}
-          TOKEN_luke-hagar-sp: ${{ secrets.TOKEN_luke-hagar-sp }}
+          TOKEN_lukehagar: ${{ secrets.TOKEN_LUKEHAGAR }}
+          TOKEN_lukehagarsp: ${{ secrets.TOKEN_LUKEHAGARSP }}
       - uses: actions/upload-artifact@v3
         with:
           name: stats.gif
