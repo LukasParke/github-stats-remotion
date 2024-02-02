@@ -1,5 +1,5 @@
-import {UserStats} from '../Main';
 import {ContributionData, Language} from '../Types';
+import {UserStats} from '../config';
 import {getStatsFromGitHub} from './getStatsFromGitHub';
 
 export function getUsernamesAndTokens(): {

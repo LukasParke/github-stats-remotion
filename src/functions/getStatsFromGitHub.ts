@@ -1,4 +1,4 @@
-import {UserStats} from '../Main';
+import {UserStats} from '../MainCard';
 import {Language} from '../Types';
 import {NOT_LANGUAGES} from '../config';
 

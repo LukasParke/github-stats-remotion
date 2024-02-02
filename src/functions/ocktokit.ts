@@ -163,6 +163,8 @@ export async function getContributionCollection(year: string, token: string) {
 		);
 	}
 
+	console.log(promises);
+
 	const years = (await Promise.all(promises)).filter(Boolean) as {
 		viewer: {contributionsCollection: ContributionsCollection};
 	}[];
