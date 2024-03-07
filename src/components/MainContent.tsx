@@ -31,7 +31,7 @@ export function MainContent({userStats}: {userStats: UserStats}) {
 	const frame = useCurrentFrame();
 
 	const firstFields: {
-		icon?: any;
+		icon?;
 		label: string;
 		value: number;
 	}[] = [
@@ -63,25 +63,27 @@ export function MainContent({userStats}: {userStats: UserStats}) {
 	];
 
 	return (
-		<AbsoluteFill className="bg-[#151a24] p-2 text-gray-300 font-mono">
-			<div className="flex flex-col justify-between grow">
-				{firstFields.map((field, i) => (
-					<div
-						key={`${field.label}`}
-						className="flex flex-row justify-between gap-2"
-						style={{opacity: interpolateFactory(frame, i / 5, 1)}}
-					>
-						<div className="flex gap-2">
-							{field.icon && <field.icon className="w-5 h-5" />}
-							<p className="text-sm whitespace-nowrap my-auto">
-								{field.label}:
+		<AbsoluteFill className="bg-transparent p-1">
+			<div className="bg-[#282a36] p-3 text-[#f8f8f2] h-full font-mono rounded-xl shadow-2xl">
+				<div className="flex flex-col justify-between h-full">
+					{firstFields.map((field, i) => (
+						<div
+							key={`${field.label}`}
+							className="flex flex-row justify-between gap-2"
+							style={{opacity: interpolateFactory(frame, i / 5, 1)}}
+						>
+							<div className="flex gap-2">
+								{field.icon && <field.icon className="w-5 h-5" />}
+								<p className="text-sm whitespace-nowrap my-auto">
+									{field.label}:
+								</p>
+							</div>
+							<p className="text-start text-sm my-auto">
+								{addCommas(field.value)}
 							</p>
 						</div>
-						<p className="text-start text-sm my-auto">
-							{addCommas(field.value)}
-						</p>
-					</div>
-				))}
+					))}
+				</div>
 			</div>
 		</AbsoluteFill>
 	);
