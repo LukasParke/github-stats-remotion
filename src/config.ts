@@ -21,11 +21,39 @@ export const NOT_LANGUAGES = [
 	'php',
 ];
 
+const ContributionDay = z.object({
+	contributionCount: z.number(),
+	date: z.string(),
+});
+
+const Week = z.object({
+	contributionDays: z.array(ContributionDay),
+});
+
+const ContributionCalendar = z.object({
+	totalContributions: z.number(),
+	weeks: z.array(Week),
+});
+
+const ContributionsCollection = z.object({
+	totalCommitContributions: z.number(),
+	restrictedContributionsCount: z.number(),
+	totalIssueContributions: z.number(),
+	totalRepositoryContributions: z.number(),
+	totalPullRequestContributions: z.number(),
+	totalPullRequestReviewContributions: z.number(),
+	contributionCalendar: ContributionCalendar,
+});
+
 export const userStatsSchema = z.object({
 	name: z.string(),
+	avatarUrl: z.string(),
 	username: z.string(),
 	repoViews: z.number(),
 	linesOfCodeChanged: z.number(),
+	linesAdded: z.number(),
+	linesDeleted: z.number(),
+	linesChanged: z.number(),
 	totalCommits: z.number(),
 	totalPullRequests: z.number(),
 	openIssues: z.number(),
@@ -42,9 +70,8 @@ export const userStatsSchema = z.object({
 			value: z.number(),
 		})
 	),
-	contributionData: z.array(
-		z.object({contributionCount: z.number(), date: z.string()})
-	),
+	contributionsCollection: ContributionsCollection,
+	contributionCalendar: z.array(ContributionDay),
 });
 
 export const mainSchema = z.object({

@@ -7,6 +7,7 @@ import {LanguagesCard} from './LanguagesCard';
 import {getUserStats} from './functions/setup';
 import {Config, MainProps, mainSchema} from './config';
 import {defaultStats} from './defaultStats';
+import {ReadmeCard} from './ReadmeCard';
 
 const {FPS, DurationInFrames} = Config;
 
@@ -50,6 +51,19 @@ export const RemotionRoot = () => {
 				fps={FPS}
 				width={500}
 				height={180}
+				schema={mainSchema}
+				calculateMetadata={calculateMetadata}
+				defaultProps={{
+					userStats: defaultStats,
+				}}
+			/>
+			<Composition
+				id="readme"
+				component={ReadmeCard}
+				durationInFrames={DurationInFrames}
+				fps={FPS}
+				width={500}
+				height={350}
 				schema={mainSchema}
 				calculateMetadata={calculateMetadata}
 				defaultProps={{

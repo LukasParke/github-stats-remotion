@@ -1,3 +1,6 @@
+import {ClassValue, clsx} from 'clsx';
+import {twMerge} from 'tailwind-merge';
+
 /**
  * Format bytes as human-readable text.
  *
@@ -42,4 +45,8 @@ export function percentage(partialValue: number, totalValue: number) {
 
 export function addCommas(x: number) {
 	return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+export function cn(...inputs: ClassValue[]) {
+	return twMerge(clsx(inputs));
 }

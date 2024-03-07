@@ -7,9 +7,10 @@
 	],
 	"scripts": {
 		"start": "remotion studio --props ./input.json",
-		"render": "yarn render:main && yarn render:languages",
+		"render": "yarn render:main && yarn render:languages && yarn render:readme",
 		"render:main": "remotion render --props ./input.json main out/stats.gif",
 		"render:languages": "remotion render --props ./input.json languages out/languages.gif",
+		"render:readme": "remotion render --props ./input.json readme out/readme.gif",
 		"upgrade": "remotion upgrade",
 		"test": "eslint src --ext ts,tsx,js,jsx && tsc"
 	},
@@ -20,10 +21,14 @@
 		"@remotion/cli": "^4.0.0",
 		"@remotion/zod-types": "^4.0.0",
 		"axios": "^1.6.5",
+		"clsx": "^2.1.0",
+		"framer-motion": "^11.0.8",
+		"lucide-react": "^0.350.0",
 		"octokit": "^3.1.2",
 		"react": "^18.0.0",
 		"react-dom": "^18.0.0",
 		"remotion": "^4.0.0",
+		"tailwind-merge": "^2.2.1",
 		"zod": "^3.21.4"
 	},
 	"devDependencies": {

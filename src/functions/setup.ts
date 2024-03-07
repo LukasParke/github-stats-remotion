@@ -1,4 +1,4 @@
-import {ContributionData, Language} from '../Types';
+import {ContributionDay, Language} from '../Types';
 import {UserStats} from '../config';
 
 const statsTemplate = (username: string) =>
@@ -20,12 +20,9 @@ export async function getUsersStatsFromGithub(usernames: string[]) {
 
 export function mergeUsersStats(stats: UserStats[]): UserStats {
 	const userStats = stats[0];
+
 	for (const stat of stats.slice(1)) {
 		userStats.closedIssues += stat.closedIssues;
-		userStats.contributionData = [
-			...userStats.contributionData,
-			...stat.contributionData,
-		];
 		userStats.starCount += stat.starCount;
 		userStats.openIssues += stat.openIssues;
 		userStats.topLanguages = [...userStats.topLanguages, ...stat.topLanguages];
@@ -34,29 +31,66 @@ export function mergeUsersStats(stats: UserStats[]): UserStats {
 		userStats.totalPullRequests += stat.totalPullRequests;
 		userStats.repoViews += stat.repoViews;
 		userStats.linesOfCodeChanged += stat.linesOfCodeChanged;
+		userStats.linesAdded += stat.linesAdded;
+		userStats.linesDeleted += stat.linesDeleted;
+		userStats.linesChanged += stat.linesChanged;
 		userStats.codeByteTotal += stat.codeByteTotal;
 		userStats.forkCount += stat.forkCount;
+
+		userStats.contributionsCollection.totalCommitContributions +=
+			stat.contributionsCollection.totalCommitContributions;
+		userStats.contributionsCollection.restrictedContributionsCount +=
+			stat.contributionsCollection.restrictedContributionsCount;
+		userStats.contributionsCollection.totalIssueContributions +=
+			stat.contributionsCollection.totalIssueContributions;
+		userStats.contributionsCollection.totalRepositoryContributions +=
+			stat.contributionsCollection.totalRepositoryContributions;
+		userStats.contributionsCollection.totalPullRequestContributions +=
+			stat.contributionsCollection.totalPullRequestContributions;
+		userStats.contributionsCollection.totalPullRequestReviewContributions +=
+			stat.contributionsCollection.totalPullRequestReviewContributions;
+
+		userStats.contributionsCollection.contributionCalendar.totalContributions +=
+			stat.contributionsCollection.contributionCalendar.totalContributions;
+
+		userStats.contributionsCollection.contributionCalendar.weeks.push(
+			...stat.contributionsCollection.contributionCalendar.weeks
+		);
 	}
 
 	return userStats;
 }
 
+export function convertWeeksToDays(stats: UserStats) {
+	const days: ContributionDay[] = [];
+
+	for (const week of stats.contributionsCollection.contributionCalendar.weeks) {
+		days.push(...week.contributionDays);
+	}
+
+	stats.contributionCalendar = days;
+}
+
 export function sortAndMergeContributionData(userStats: UserStats) {
-	userStats.contributionData.sort(
-		(a: ContributionData, b: ContributionData) => {
+	userStats.contributionCalendar.sort(
+		(a: ContributionDay, b: ContributionDay) => {
 			// @ts-expect-error This is a valid comparison
 			return new Date(a.date) - new Date(b.date);
 		}
 	);
 
-	for (let index = 0; index < userStats.contributionData.length - 1; index++) {
+	for (
+		let index = 0;
+		index < userStats.contributionCalendar.length - 1;
+		index++
+	) {
 		if (
-			userStats.contributionData[index].date ===
-			userStats.contributionData[index + 1].date
+			userStats.contributionCalendar[index].date ===
+			userStats.contributionCalendar[index + 1].date
 		) {
-			userStats.contributionData[index].contributionCount +=
-				userStats.contributionData[index + 1].contributionCount;
-			userStats.contributionData.splice(index + 1, 1);
+			userStats.contributionCalendar[index].contributionCount +=
+				userStats.contributionCalendar[index + 1].contributionCount;
+			userStats.contributionCalendar.splice(index + 1, 1);
 		}
 	}
 }
@@ -93,6 +127,7 @@ export function sortAndMergeTopLanguages(userStats: UserStats): UserStats {
 export async function getUserStats(usernames: string[]) {
 	const stats = getUsersStatsFromGithub(usernames);
 	let userStats = mergeUsersStats(await stats);
+	convertWeeksToDays(userStats);
 	sortAndMergeContributionData(userStats);
 	userStats = sortAndMergeTopLanguages(userStats);
 	return userStats;
