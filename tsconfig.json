@@ -9,6 +9,7 @@
 		"lib": ["es2021"],
 		"esModuleInterop": true,
 		"skipLibCheck": true,
+		"noImplicitAny": false,
 		"forceConsistentCasingInFileNames": true,
 		"noUnusedLocals": true
 	}

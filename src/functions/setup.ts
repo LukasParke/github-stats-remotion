@@ -1,52 +1,21 @@
 import {ContributionData, Language} from '../Types';
 import {UserStats} from '../config';
-import {getStatsFromGitHub} from './getStatsFromGitHub';
 
-export function getUsernamesAndTokens(): {
-	usernames: string[];
-	tokenMap: Map<string, string>;
-} {
-	const usernames: string[] = [];
-	const tokenMap = new Map<string, string>();
+const statsTemplate = (username: string) =>
+	`https://raw.githubusercontent.com/${username}/stats/main/github-user-stats.json`;
 
-	if (process.env.USERNAMES) {
-		for (const username of process.env.USERNAMES.split(',')) {
-			usernames.push(username);
-		}
-	} else {
-		usernames.push(process.env.USERNAME!);
-	}
-
-	if (usernames.length > 1) {
-		for (const username of usernames) {
-			const userNameToCheck = username.replaceAll('-', '');
-			const token = process.env[`TOKEN_${userNameToCheck}`];
-			if (!token) {
-				throw new Error(`Token for ${userNameToCheck} is missing`);
-			}
-			tokenMap.set(username, token);
-		}
-	}
-
-	return {usernames, tokenMap};
-}
-
-export async function getUsersStatsFromGithub(
-	usernames: string[],
-	tokenMap: Map<string, string>
-) {
-	const promises = [];
+export async function getUsersStatsFromGithub(usernames: string[]) {
+	const stats: UserStats[] = [];
 
 	for (const username of usernames) {
-		promises.push(
-			getStatsFromGitHub({
-				username,
-				token: tokenMap.get(username) || '',
-			})
-		);
+		const resp = await fetch(statsTemplate(username));
+
+		const userStats = await resp.json();
+
+		stats.push(userStats);
 	}
 
-	return Promise.all(promises);
+	return stats;
 }
 
 export function mergeUsersStats(stats: UserStats[]): UserStats {
@@ -92,7 +61,7 @@ export function sortAndMergeContributionData(userStats: UserStats) {
 	}
 }
 
-export function sortAndMergeTopLanguages(userStats: UserStats) {
+export function sortAndMergeTopLanguages(userStats: UserStats): UserStats {
 	const topLanguages: Language[] = [];
 	for (const language of userStats.topLanguages) {
 		if (
@@ -121,9 +90,8 @@ export function sortAndMergeTopLanguages(userStats: UserStats) {
 	return userStats;
 }
 
-export async function getUserStats() {
-	const {usernames, tokenMap} = getUsernamesAndTokens();
-	const stats = getUsersStatsFromGithub(usernames, tokenMap);
+export async function getUserStats(usernames: string[]) {
+	const stats = getUsersStatsFromGithub(usernames);
 	let userStats = mergeUsersStats(await stats);
 	sortAndMergeContributionData(userStats);
 	userStats = sortAndMergeTopLanguages(userStats);

@@ -1,4 +1,4 @@
-import {CalculateMetadataFunction, Composition} from 'remotion';
+import {CalculateMetadataFunction, Composition, getInputProps} from 'remotion';
 import './style.css';
 
 import {MainCard} from './MainCard';
@@ -10,21 +10,20 @@ import {defaultStats} from './defaultStats';
 
 const {FPS, DurationInFrames} = Config;
 
-let stats: any = null;
-
 export const RemotionRoot = () => {
 	const calculateMetadata: CalculateMetadataFunction<MainProps> = async (
 		props
 	) => {
-		if (!stats) {
-			const userStats = await getUserStats();
-			stats = userStats;
-		}
+		const {usernames} = getInputProps();
+
+		console.log(usernames);
+
+		const userStats = await getUserStats(usernames as string[]);
 
 		return {
 			props: {
 				...props,
-				userStats: stats,
+				userStats,
 			},
 		};
 	};
@@ -39,7 +38,7 @@ export const RemotionRoot = () => {
 				width={500}
 				height={230}
 				schema={mainSchema}
-				// calculateMetadata={calculateMetadata}
+				calculateMetadata={calculateMetadata}
 				defaultProps={{
 					userStats: defaultStats,
 				}}
@@ -52,7 +51,7 @@ export const RemotionRoot = () => {
 				width={500}
 				height={180}
 				schema={mainSchema}
-				// calculateMetadata={calculateMetadata}
+				calculateMetadata={calculateMetadata}
 				defaultProps={{
 					userStats: defaultStats,
 				}}
