@@ -114,7 +114,7 @@ export function ReadmeContent({userStats}: {userStats: UserStats}) {
 				<div className="flex flex-row justify-start gap-4 pb-4">
 					<Img className="rounded-full size-10" src={userStats.avatarUrl} />
 					<p className="my-auto">
-						Hi My name is {userStats.name || userStats.username}
+						Hi, I'm {userStats.name || userStats.username}
 					</p>
 				</div>
 				<div className="absolute left-0 right-0 bottom-0 top-[5rem] -rotate-[69deg] scale-[1.5]">
