@@ -10,7 +10,7 @@ permissions:
   # added or changed files to the repository.
   contents: write
 
-name: Render video
+name: Render GIFs
 jobs:
   render:
     name: Render video
