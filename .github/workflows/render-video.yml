@@ -12,17 +12,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
+
       - uses: actions/setup-node@main
+
       - run: sudo apt update
+
       - run: sudo apt install ffmpeg
-      - run: npm i
-      - name: Render video
-        run: yarn build
-        env:
-          USERNAMES: lukehagar,luke-hagar-sp
-          TOKEN_lukehagar: ${{ secrets.TOKEN_LUKEHAGAR }}
-          TOKEN_lukehagarsp: ${{ secrets.TOKEN_LUKEHAGARSP }}
-      - uses: actions/upload-artifact@v3
+
+      - name: Run install
+        uses: borales/actions-yarn@v5
         with:
-          name: stats.gif
-          path: out/stats.gif
+          cmd: install
+
+      - name: Render Video
+        uses: borales/actions-yarn@v5
+        with:
+          cmd: render
+
+      - name: Auto commit
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update gifs"
