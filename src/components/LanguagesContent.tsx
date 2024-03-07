@@ -23,8 +23,8 @@ export function LanguagesContent({userStats}: {userStats: UserStats}) {
 	const frame = useCurrentFrame();
 
 	return (
-		<AbsoluteFill className="bg-transparent p-2">
-			<div className="bg-[#282a36] font-mono rounded-xl p-2 flex flex-col shadow-2xl">
+		<AbsoluteFill className="bg-transparent p-1">
+			<div className="bg-[#282a36] font-mono rounded-xl p-2 shadow-2xl  h-full">
 				<div
 					style={{opacity: interpolateFactory(frame, 1 / 5, 1)}}
 					className="bg-white rounded-lg grow h-full shadow-2xl"
