@@ -6,8 +6,10 @@
 		"*.css"
 	],
 	"scripts": {
-		"start": "remotion studio",
-		"build": "remotion render main out/stats.gif",
+		"start": "remotion studio --props ./input.json",
+		"render": "yarn render:main && yarn render:languages",
+		"render:main": "remotion render --props ./input.json main out/stats.gif",
+		"render:languages": "remotion render --props ./input.json languages out/languages.gif",
 		"upgrade": "remotion upgrade",
 		"test": "eslint src --ext ts,tsx,js,jsx && tsc"
 	},
