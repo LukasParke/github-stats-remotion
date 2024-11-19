@@ -1,3 +1,4 @@
+import { motionValue, useTransform } from 'framer-motion';
 import {
 	ArrowDownFromLine,
 	ArrowUpFromLine,
@@ -9,29 +10,14 @@ import {
 	Sparkles,
 	Telescope,
 } from 'lucide-react';
-import {AbsoluteFill, Img, interpolate, useCurrentFrame} from 'remotion';
-import {Config, UserStats} from '../config';
-import {addCommas} from '../functions/utils';
-import {GoogleGeminiEffect} from './Gemini';
-import {motionValue, useTransform} from 'framer-motion';
+import { AbsoluteFill, Img, useCurrentFrame } from 'remotion';
+import { UserStats } from '../../config';
+import { interpolateFactory } from '../../functions/utils';
+import { AnimatedCounter } from '../Effects/AnimatedCounter';
+import { GoogleGeminiEffect } from '../Effects/Gemini';
 
-const {FPS} = Config;
 
-function interpolateFactory(
-	frame: number,
-	delayInSeconds: number,
-	durationInSeconds: number,
-	finalOpacity: number = 1
-) {
-	const delay = delayInSeconds * FPS;
-	const duration = durationInSeconds * FPS + delay;
-	return interpolate(frame, [delay, duration], [0, finalOpacity], {
-		extrapolateLeft: 'clamp',
-		extrapolateRight: 'clamp',
-	});
-}
-
-export function ReadmeContent({userStats}: {userStats: UserStats}) {
+export function ReadmeCard({userStats}: {userStats: UserStats}) {
 	const frame = useCurrentFrame();
 
 	const pathLengthFirst = useTransform(
@@ -117,7 +103,7 @@ export function ReadmeContent({userStats}: {userStats: UserStats}) {
 						Hi, I'm {userStats.name || userStats.username}
 					</p>
 				</div>
-				<div className="absolute left-0 right-0 bottom-0 top-[5rem] -rotate-[69deg] scale-[1.5]">
+				<div className="absolute left-0 right-0 bottom-0 top-[9rem] -rotate-[105deg] scale-[1.5]">
 					<GoogleGeminiEffect
 						pathLengths={[
 							pathLengthFirst,
@@ -143,7 +129,7 @@ export function ReadmeContent({userStats}: {userStats: UserStats}) {
 								</p>
 							</div>
 							<p className="text-start text-sm my-auto">
-								{addCommas(field.value)}
+								<AnimatedCounter value={field.value} duration={3} startFrame={(i + 1) * 5} />
 							</p>
 						</div>
 					))}

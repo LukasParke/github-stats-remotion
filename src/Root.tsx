@@ -1,13 +1,11 @@
 import {CalculateMetadataFunction, Composition, getInputProps} from 'remotion';
 import './style.css';
 
-import {MainCard} from './MainCard';
-import {LanguagesCard} from './LanguagesCard';
-
 import {getUserStats} from './functions/setup';
 import {Config, MainProps, mainSchema} from './config';
 import {defaultStats} from './defaultStats';
-import {ReadmeCard} from './ReadmeCard';
+import {Card} from './components/Effects/Card';
+import {cards} from './components/Cards';
 
 const {FPS, DurationInFrames} = Config;
 
@@ -16,9 +14,6 @@ export const RemotionRoot = () => {
 		props
 	) => {
 		const {usernames} = getInputProps();
-
-		console.log(usernames);
-
 		const userStats = await getUserStats(usernames as string[]);
 
 		return {
@@ -31,45 +26,26 @@ export const RemotionRoot = () => {
 
 	return (
 		<>
-			<Composition
-				id="main"
-				component={MainCard}
-				durationInFrames={DurationInFrames}
-				fps={FPS}
-				width={500}
-				height={230}
-				schema={mainSchema}
-				calculateMetadata={calculateMetadata}
-				defaultProps={{
-					userStats: defaultStats,
-				}}
-			/>
-			<Composition
-				id="languages"
-				component={LanguagesCard}
-				durationInFrames={DurationInFrames}
-				fps={FPS}
-				width={500}
-				height={180}
-				schema={mainSchema}
-				calculateMetadata={calculateMetadata}
-				defaultProps={{
-					userStats: defaultStats,
-				}}
-			/>
-			<Composition
-				id="readme"
-				component={ReadmeCard}
-				durationInFrames={DurationInFrames}
-				fps={FPS}
-				width={500}
-				height={350}
-				schema={mainSchema}
-				calculateMetadata={calculateMetadata}
-				defaultProps={{
-					userStats: defaultStats,
-				}}
-			/>
+			{cards.map(({id, component: Component, height, width = 500}) => (
+				<Composition
+					key={id}
+					id={id}
+					component={(props) => (
+						<Card userStats={props.userStats}>
+							<Component userStats={props.userStats} />
+						</Card>
+					)}
+					durationInFrames={DurationInFrames}
+					fps={FPS}
+					width={width}
+					height={height}
+					schema={mainSchema}
+					calculateMetadata={calculateMetadata}
+					defaultProps={{
+						userStats: defaultStats,
+					}}
+				/>
+			))}
 		</>
 	);
 };

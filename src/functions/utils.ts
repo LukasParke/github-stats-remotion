@@ -1,5 +1,7 @@
 import {ClassValue, clsx} from 'clsx';
+import { interpolate } from 'remotion';
 import {twMerge} from 'tailwind-merge';
+import { FPS } from '../config';
 
 /**
  * Format bytes as human-readable text.
@@ -39,6 +41,14 @@ export function humanReadableFileSize(
 	return bytes.toFixed(dp) + ' ' + units[u];
 }
 
+export const formatBytes = (bytes: number): string => {
+	const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+	if (bytes === 0) return '0 Byte';
+	const i = Math.floor(Math.log(bytes) / Math.log(1024));
+	return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${sizes[i]}`;
+  };
+  
+
 export function percentage(partialValue: number, totalValue: number) {
 	return (100 * partialValue) / totalValue;
 }
@@ -49,4 +59,18 @@ export function addCommas(x: number) {
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
+}
+
+export function interpolateFactory(
+	frame: number,
+	delayInSeconds: number,
+	durationInSeconds: number,
+	finalOpacity: number = 1
+) {
+	const delay = delayInSeconds * FPS;
+	const duration = durationInSeconds * FPS + delay;
+	return interpolate(frame, [delay, duration], [0, finalOpacity], {
+		extrapolateLeft: 'clamp',
+		extrapolateRight: 'clamp',
+	});
 }

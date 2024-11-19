@@ -1,7 +1,7 @@
 import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
-import {Config, UserStats} from '../config';
-import {Languages} from '../Languages';
-import {percentage} from '../functions/utils';
+import {Config, UserStats} from '../../config';
+import {Languages} from '../../Languages';
+import {percentage} from '../../functions/utils';
 
 const {FPS} = Config;
 

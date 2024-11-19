@@ -7,10 +7,11 @@
 	],
 	"scripts": {
 		"start": "remotion studio --props ./input.json",
-		"render": "yarn render:main && yarn render:languages && yarn render:readme",
-		"render:main": "remotion render --props ./input.json main out/stats.gif",
-		"render:languages": "remotion render --props ./input.json languages out/languages.gif",
-		"render:readme": "remotion render --props ./input.json readme out/readme.gif",
+		"render": "yarn render:main && yarn render:languages && yarn render:readme && yarn render:stats",
+		"render:main": "remotion render --props ./input.json main out/main.webp",
+		"render:languages": "remotion render --props ./input.json languages out/languages.webp",
+		"render:readme": "remotion render --props ./input.json readme out/readme.webp",
+		"render:stats": "remotion render --props ./input.json stats out/stats.webp",
 		"upgrade": "remotion upgrade",
 		"test": "eslint src --ext ts,tsx,js,jsx && tsc"
 	},
