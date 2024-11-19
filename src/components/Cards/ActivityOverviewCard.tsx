@@ -1,22 +1,15 @@
 import { motion } from 'framer-motion';
-import { interpolate, useCurrentFrame } from 'remotion';
 import { UserStats } from '../../config';
 import { AnimatedCounter } from '../Effects/AnimatedCounter';
 
 export function ActivityOverviewCard({ userStats }: { userStats: UserStats }) {
-  const frame = useCurrentFrame();
-  const fadeIn = (delay = 0) =>
-    interpolate(frame - delay, [0, 30], [0, 1], {
-      extrapolateRight: 'clamp',
-    });
 
   return (
     <motion.div
-      style={{ opacity: fadeIn(1) }}
       className="bg-gray-800 rounded-lg p-4 shadow-lg text-white w-full"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 2.4 }}
+      transition={{ duration: 0.5 }}
     >
       <h2 className="text-xl font-semibold mb-4 opacity-80">Activity Overview</h2>
       <div className="flex justify-between mb-2">

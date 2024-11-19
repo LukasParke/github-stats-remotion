@@ -18,8 +18,8 @@ export function CommitStreakCard({ userStats }: { userStats: UserStats }) {
   return (
     <motion.div
       className="bg-gray-800 rounded-lg p-4 shadow-lg overflow-hidden relative text-white w-full"
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
       <h2 className="text-xl font-semibold mb-4 opacity-80">Commit Streak</h2>
