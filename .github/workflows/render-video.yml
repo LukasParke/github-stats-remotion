@@ -10,6 +10,10 @@ permissions:
   # added or changed files to the repository.
   contents: write
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 name: Render GIFs
 jobs:
   render:
