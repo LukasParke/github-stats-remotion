@@ -96,7 +96,7 @@ export function ReadmeCard({userStats}: {userStats: UserStats}) {
 
 	return (
 		<AbsoluteFill className="bg-transparent p-1">
-			<div className="bg-[#282a36] p-3 text-[#f8f8f2] h-full font-mono rounded-xl shadow-2xl overflow-hidden relative">
+			<div className="bg-[#282a36] text-[#f8f8f2] p-3 h-full font-mono rounded-xl shadow-2xl overflow-hidden relative">
 				<div className="flex flex-row justify-start gap-4 pb-4">
 					<Img className="rounded-full size-10" src={userStats.avatarUrl} />
 					<p className="my-auto">

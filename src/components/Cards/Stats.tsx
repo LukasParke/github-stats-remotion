@@ -1,6 +1,6 @@
 import { AbsoluteFill, useCurrentFrame } from 'remotion';
 import { UserStats } from '../../config';
-import { addCommas, interpolateFactory } from '../../functions/utils';
+import { interpolateFactory } from '../../functions/utils';
 import Close from '../SVGs/close';
 import Commit from '../SVGs/commit';
 import Contribution from '../SVGs/contribution';

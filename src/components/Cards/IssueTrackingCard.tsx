@@ -1,15 +1,16 @@
 import { motion } from 'framer-motion';
-import { interpolate, useCurrentFrame } from 'remotion';
 import { UserStats } from '../../config';
 import { AnimatedCounter } from '../Effects/AnimatedCounter';
+import { useCurrentFrame } from 'remotion';
+import { fadeInAndSlideUp } from '../../functions/animations';
 
 export function IssueTrackingCard({ userStats }: { userStats: UserStats }) {
+  const frame = useCurrentFrame();
+
   return (
-    <motion.div
-      className="bg-gray-800 rounded-lg p-4 shadow-lg text-white w-full"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+    <div
+      className="bg-[#282a36] text-[#f8f8f2] rounded-lg p-4 shadow-lg w-full"
+      style={fadeInAndSlideUp(frame)}
     >
       <h2 className="text-xl font-semibold mb-4 opacity-80">Issue Tracking</h2>
       <div className="flex justify-between mb-2">
@@ -34,6 +35,6 @@ export function IssueTrackingCard({ userStats }: { userStats: UserStats }) {
         <span>Closed</span>
         <span>Open</span>
       </div>
-    </motion.div>
+    </div>
   );
 } 

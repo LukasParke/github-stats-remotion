@@ -1,36 +1,31 @@
-import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { interpolate, useCurrentFrame, useVideoConfig } from 'remotion';
 import { UserStats } from '../../config';
 import { AnimatedCounter } from '../Effects/AnimatedCounter';
+import { fadeInAndSlideUp } from '../../functions/animations';
+import { formatBytes } from '../../functions/utils';
+import { StatCard } from '../Effects/StatCard';
 
-const StatCard = ({ title, value, duration = 3, gradient, delay }) => {
-  // Convert delay from seconds to frames
-  const { fps } = useVideoConfig();
-  const startFrame = delay * fps;
+// const StatCard = ({ title, value, duration = 3, gradient, delay }) => {
+//   const { fps } = useVideoConfig();
+//   const frame = useCurrentFrame();
+//   const startFrame = delay * fps;
+  
+//   const animation = fadeInAndSlideUp(frame, startFrame);
 
-  return (
-    <motion.div
-      className={`bg-gray-800 rounded-lg p-4 shadow-lg ${gradient}`}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay }}
-      aria-label={`${title}: ${value}`}
-    >
-      <h3 className="text-lg font-semibold mb-2 opacity-80">{title}</h3>
-      <p className="text-3xl font-bold">
-        <AnimatedCounter value={value} duration={duration} startFrame={startFrame} />
-      </p>
-    </motion.div>
-  );
-};
-
-const formatBytes = (bytes: number): string => {
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-  if (bytes === 0) return '0 Byte';
-  const i = Math.floor(Math.log(bytes) / Math.log(1024));
-  return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${sizes[i]}`;
-};
+//   return (
+//     <div
+//       className={`bg-gray-800 rounded-lg p-4 shadow-lg ${gradient}`}
+//       style={animation}
+//       aria-label={`${title}: ${value}`}
+//     >
+//       <h3 className="text-lg font-semibold mb-2 opacity-80">{title}</h3>
+//       <p className="text-3xl font-bold">
+//         <AnimatedCounter value={value} duration={duration} startFrame={startFrame} />
+//       </p>
+//     </div>
+//   );
+// };
 
 const LanguageItem = ({ language, bytes, color }) => (
   <div className="flex items-center mb-2 p-2 bg-gray-700 rounded-lg">
@@ -91,22 +86,15 @@ export function StatsContent({userStats}: {userStats: UserStats}) {
     );
   }
 
-  const fadeIn = (delay = 0) =>
-    interpolate(frame - delay, [0, 30], [0, 1], {
-      extrapolateRight: 'clamp',
-    });
-
   return (
     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 text-white p-8">
       <div className="max-w-5xl w-full space-y-8">
-        <motion.h1
+        <h1
           className="text-5xl font-bold text-center mb-8"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+            style={fadeInAndSlideUp(frame)}
         >
           GitHub Profile Stats
-        </motion.h1>
+        </h1>
 
         <div className="grid grid-cols-3 gap-6">
           <StatCard title="Total Stars" value={userStats.starCount} gradient="bg-gradient-to-br from-yellow-400/10 to-orange-500/10" delay={0.2} />
@@ -118,12 +106,9 @@ export function StatsContent({userStats}: {userStats: UserStats}) {
         </div>
 
         <div className="grid grid-cols-3 gap-6">
-          <motion.div
-            style={{ opacity: fadeIn(30) }}
-            className="bg-gray-800 rounded-lg p-4 shadow-lg"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 1.4 }}
+          <div
+            className="bg-[#282a36] text-[#f8f8f2] rounded-lg p-4 shadow-lg"
+            style={fadeInAndSlideUp(frame)}
           >
             <h2 className="text-xl font-semibold mb-4 opacity-80">Issue Tracking</h2>
             <div className="flex justify-between mb-2">
@@ -148,14 +133,11 @@ export function StatsContent({userStats}: {userStats: UserStats}) {
               <span>Closed</span>
               <span>Open</span>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            style={{ opacity: fadeIn(45) }}
-            className="bg-gray-800 rounded-lg p-4 shadow-lg"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 1.8 }}
+          <div
+            className="bg-[#282a36] text-[#f8f8f2] rounded-lg p-4 shadow-lg"
+            style={fadeInAndSlideUp(frame)}
           >
             <h2 className="text-xl font-semibold mb-4 opacity-80">Code Metrics</h2>
             <div className="flex justify-between mb-2">
@@ -177,14 +159,11 @@ export function StatsContent({userStats}: {userStats: UserStats}) {
                 <AnimatedCounter value={200} duration={3} />
               </span>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            style={{ opacity: fadeIn(60) }}
-            className="bg-gray-800 rounded-lg p-4 shadow-lg"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 2.4 }}
+          <div
+            className="bg-[#282a36] text-[#f8f8f2] rounded-lg p-4 shadow-lg"
+            style={fadeInAndSlideUp(frame)}
           >
             <h2 className="text-xl font-semibold mb-4 opacity-80">Activity Overview</h2>
             <div className="flex justify-between mb-2">
@@ -199,27 +178,23 @@ export function StatsContent({userStats}: {userStats: UserStats}) {
               <span className="opacity-80">Longest Streak:</span>
               <span className="font-semibold"><AnimatedCounter value={30} duration={3} /> days</span>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-6">
-          <motion.div
-            className="bg-gray-800 rounded-lg p-4 shadow-lg overflow-hidden relative"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 3.0 }}
+          <div
+            className="bg-[#282a36] text-[#f8f8f2] rounded-lg p-4 shadow-lg overflow-hidden relative"
+            style={fadeInAndSlideUp(frame)}
           >
             <h2 className="text-xl font-semibold mb-4 opacity-80">Commit Streak</h2>
             <div className="flex items-center justify-center">
               <CommitStreak streak={200} />
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            className="bg-gray-800 rounded-lg p-4 shadow-lg"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 3.2 }}
+          <div
+            className="bg-[#282a36] text-[#f8f8f2] rounded-lg p-4 shadow-lg"
+            style={fadeInAndSlideUp(frame)}
           >
             <h2 className="text-xl font-semibold mb-4 opacity-80">Top Languages</h2>
             <div className="grid grid-cols-2 gap-2">
@@ -232,7 +207,7 @@ export function StatsContent({userStats}: {userStats: UserStats}) {
                 />
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>
