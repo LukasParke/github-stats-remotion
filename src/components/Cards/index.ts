@@ -55,7 +55,7 @@ export const cards: CardConfig[] = [
   {
     id: 'commit-streak',
     component: CommitStreakCard,
-    height: 230,
+    height: 140,
   },
   {
     id: 'top-languages',

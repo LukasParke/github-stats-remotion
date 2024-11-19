@@ -1,7 +1,7 @@
-import {  motion } from 'framer-motion';
-import { UserStats } from '../../config';
+import { motion } from 'framer-motion';
 import { interpolate, useCurrentFrame } from 'remotion';
-import { formatBytes, interpolateFactory } from '../../functions/utils';
+import { UserStats } from '../../config';
+import { formatBytes } from '../../functions/utils';
 
 export function TopLanguagesCard({ userStats }: { userStats: UserStats }) {
   const frame = useCurrentFrame();

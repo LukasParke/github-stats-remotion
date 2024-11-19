@@ -12,7 +12,7 @@ export function CodeMetricsCard({ userStats }: { userStats: UserStats }) {
 
   return (
     <motion.div
-      style={{ opacity: fadeIn(30) }}
+      style={{ opacity: fadeIn(1) }}
       className="bg-gray-800 rounded-lg p-4 shadow-lg text-white w-full"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}

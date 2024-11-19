@@ -3,7 +3,7 @@ import { StatCard } from '../Effects/StatCard';
 
 export function MainStatsCards({ userStats }: { userStats: UserStats }) {
   return (
-    <div className="grid grid-cols-3 gap-6 text-white w-full">
+    <div className="grid grid-cols-3 gap-6 text-white">
       <StatCard title="Total Stars" value={userStats.starCount} gradient="bg-gradient-to-br from-yellow-400/10 to-orange-500/10" delay={0.2} />
       <StatCard title="Total Forks" value={userStats.forkCount} gradient="bg-gradient-to-br from-green-400/10 to-blue-500/10" delay={0.6} />
       <StatCard title="Repo Views" value={userStats.repoViews} gradient="bg-gradient-to-br from-purple-400/10 to-pink-500/10" delay={1.0} />
