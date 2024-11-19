@@ -2,11 +2,6 @@
 
 This project generates GIFs for each of the GitHub stats cards.
 
-## Setup
-
-1. Install dependencies: `yarn`
-2. Add your GitHub token to the `.env` file
-
 # Examples
 
 ![Readme](./out/readme.gif)
