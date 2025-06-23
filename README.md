@@ -1,6 +1,6 @@
 # Generate GitHub Stats GIFs
 
-This project generates GIFs for each of the GitHub stats cards.
+This project generates GIFs for each of the GitHub stats cards. Some stats below are placeholders in lieu of live account data.
 
 # Examples
 
