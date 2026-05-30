@@ -6,7 +6,7 @@ import {CommitStreakCard} from './CommitStreakCard';
 import {IssueTrackingCard} from './IssueTrackingCard';
 import {LanguagesContent} from './LanguagesContent';
 import {MainStatsCards} from './MainStatsCards';
-import {ReadmeCard} from './ReadmeCard';
+import {ReadmeCard, ReadmeClassicCard, ReadmeSpotlightCard} from './ReadmeCard';
 import {RepositoryImpactCard} from './RepositoryImpactCard';
 import {Stats} from './Stats';
 import {TopLanguagesCard} from './TopLanguagesCard';
@@ -18,55 +18,66 @@ export type CardConfig = {
 };
 
 export const cards: CardConfig[] = [
-  {
-    id: 'stats',
-    component: Stats,
-    height: 230,
-  },
-  {
-    id: 'languages',
-    component: LanguagesContent,
-    height: 180,
-  },
-  {
-    id: 'readme',
-    component: ReadmeCard,
-    height: 350,
-  },
-  {
-    id: 'main-stats',
-    component: MainStatsCards,
-    height: 273,
-  },
-  {
-    id: 'repo-impact',
-    component: RepositoryImpactCard,
-    height: 190,
-  },
-  {
-    id: 'issue-tracking',
-    component: IssueTrackingCard,
-    height: 178,
-  },
-  {
-    id: 'code-metrics',
-    component: CodeMetricsCard,
-    height: 180,
-  },
-  {
-    id: 'activity-overview',
-    component: ActivityOverviewCard,
-    height: 180,
-  },
-  {
-    id: 'commit-streak',
-    component: CommitStreakCard,
-    height: 140,
-  },
-  {
-    id: 'top-languages',
-    component: TopLanguagesCard,
-    height: 232,
-  },
-
-]; 
+	{
+		id: 'readme',
+		component: ReadmeCard,
+		width: 900,
+		height: 460,
+	},
+	{
+		id: 'readme-classic',
+		component: ReadmeClassicCard,
+		height: 520,
+	},
+	{
+		id: 'readme-spotlight',
+		component: ReadmeSpotlightCard,
+		width: 900,
+		height: 460,
+	},
+	{
+		id: 'stats',
+		component: Stats,
+		height: 360,
+	},
+	{
+		id: 'languages',
+		component: LanguagesContent,
+		height: 270,
+	},
+	{
+		id: 'main-stats',
+		component: MainStatsCards,
+		height: 300,
+	},
+	{
+		id: 'repo-impact',
+		component: RepositoryImpactCard,
+		height: 280,
+	},
+	{
+		id: 'issue-tracking',
+		component: IssueTrackingCard,
+		height: 280,
+	},
+	{
+		id: 'code-metrics',
+		component: CodeMetricsCard,
+		height: 280,
+	},
+	{
+		id: 'activity-overview',
+		component: ActivityOverviewCard,
+		height: 360,
+	},
+	{
+		id: 'commit-streak',
+		component: CommitStreakCard,
+		height: 230,
+	},
+	{
+		id: 'top-languages',
+		component: TopLanguagesCard,
+		height: 260,
+	},
+];

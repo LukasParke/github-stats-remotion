@@ -5,6 +5,8 @@ import {spawn} from 'node:child_process';
 
 const cards = [
 	'readme',
+	'readme-classic',
+	'readme-spotlight',
 	'main-stats',
 	'stats',
 	'repo-impact',
@@ -23,17 +25,21 @@ const args = new Map(
 		.map((arg) => {
 			const [key, value = 'true'] = arg.slice(2).split('=');
 			return [key, value];
-		})
+		}),
 );
 
-const formats = (args.get('formats') || process.env.RENDER_FORMATS || 'webp,gif')
+const formats = (
+	args.get('formats') ||
+	process.env.RENDER_FORMATS ||
+	'webp,gif'
+)
 	.split(',')
 	.map((format) => format.trim())
 	.filter(Boolean);
 const outputDir = args.get('out-dir') || process.env.RENDER_OUT_DIR || 'pages';
 const cardConcurrency = parsePositiveInt(
 	args.get('card-concurrency') || process.env.RENDER_CARD_CONCURRENCY,
-	1
+	1,
 );
 const remotionConcurrency =
 	args.get('remotion-concurrency') || process.env.REMOTION_CONCURRENCY;
@@ -52,7 +58,7 @@ if (needsGif && !keepGif) {
 }
 
 console.log(
-	`Rendering ${cards.length} cards to ${outputDir} with card concurrency ${cardConcurrency}`
+	`Rendering ${cards.length} cards to ${outputDir} with card concurrency ${cardConcurrency}`,
 );
 
 await runPool(cards, Math.min(cardConcurrency, cards.length), renderCard);
