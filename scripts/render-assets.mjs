@@ -1,7 +1,7 @@
 import {existsSync} from 'node:fs';
 import {mkdir, rm, writeFile} from 'node:fs/promises';
 import {join} from 'node:path';
-import {spawnSync} from 'node:child_process';
+import {spawn} from 'node:child_process';
 
 const cards = [
 	'readme',
@@ -31,6 +31,12 @@ const formats = (args.get('formats') || process.env.RENDER_FORMATS || 'webp,gif'
 	.map((format) => format.trim())
 	.filter(Boolean);
 const outputDir = args.get('out-dir') || process.env.RENDER_OUT_DIR || 'pages';
+const cardConcurrency = parsePositiveInt(
+	args.get('card-concurrency') || process.env.RENDER_CARD_CONCURRENCY,
+	1
+);
+const remotionConcurrency =
+	args.get('remotion-concurrency') || process.env.REMOTION_CONCURRENCY;
 const propsPath =
 	args.get('props') ||
 	process.env.RENDER_PROPS ||
@@ -45,13 +51,25 @@ if (needsGif && !keepGif) {
 	await mkdir(tempDir, {recursive: true});
 }
 
-for (const card of cards) {
+console.log(
+	`Rendering ${cards.length} cards to ${outputDir} with card concurrency ${cardConcurrency}`
+);
+
+await runPool(cards, Math.min(cardConcurrency, cards.length), renderCard);
+
+if (existsSync(tempDir)) {
+	await rm(tempDir, {recursive: true, force: true});
+}
+
+await writeFile(join(outputDir, 'index.html'), buildIndexHtml(), 'utf8');
+
+async function renderCard(card) {
 	const gifPath = keepGif
 		? join(outputDir, `${card}.gif`)
 		: join(tempDir, `${card}.gif`);
 
 	if (needsGif) {
-		run('yarn', [
+		const remotionArgs = [
 			'remotion',
 			'render',
 			'--props',
@@ -60,11 +78,15 @@ for (const card of cards) {
 			gifPath,
 			'--codec',
 			'gif',
-		]);
+		];
+		if (remotionConcurrency) {
+			remotionArgs.push('--concurrency', remotionConcurrency);
+		}
+		await run('yarn', remotionArgs);
 	}
 
 	if (formats.includes('webp')) {
-		run('ffmpeg', [
+		await run('ffmpeg', [
 			'-y',
 			'-i',
 			gifPath,
@@ -86,17 +108,38 @@ for (const card of cards) {
 	}
 }
 
-if (existsSync(tempDir)) {
-	await rm(tempDir, {recursive: true, force: true});
+async function runPool(items, concurrency, worker) {
+	let index = 0;
+	const workers = Array.from({length: concurrency}, async () => {
+		while (index < items.length) {
+			const currentIndex = index;
+			index += 1;
+			await worker(items[currentIndex]);
+		}
+	});
+	await Promise.all(workers);
 }
 
-await writeFile(join(outputDir, 'index.html'), buildIndexHtml(), 'utf8');
-
 function run(command, commandArgs) {
-	const result = spawnSync(command, commandArgs, {stdio: 'inherit'});
-	if (result.status !== 0) {
-		throw new Error(`${command} ${commandArgs.join(' ')} failed`);
+	return new Promise((resolve, reject) => {
+		const child = spawn(command, commandArgs, {stdio: 'inherit'});
+		child.on('error', reject);
+		child.on('exit', (code) => {
+			if (code === 0) {
+				resolve();
+				return;
+			}
+			reject(new Error(`${command} ${commandArgs.join(' ')} failed`));
+		});
+	});
+}
+
+function parsePositiveInt(value, fallback) {
+	const parsed = Number(value);
+	if (Number.isInteger(parsed) && parsed > 0) {
+		return parsed;
 	}
+	return fallback;
 }
 
 function buildIndexHtml() {

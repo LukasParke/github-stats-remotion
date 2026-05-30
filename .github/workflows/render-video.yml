@@ -37,6 +37,7 @@ jobs:
         with:
           node-version: 20
           cache: yarn
+          cache-dependency-path: yarn.lock
 
       - name: Enable Corepack
         run: corepack enable
@@ -49,6 +50,16 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Restore Remotion render cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules/.remotion
+            node_modules/.cache/webpack
+          key: ${{ runner.os }}-remotion-${{ hashFiles('yarn.lock', 'package.json', 'remotion.config.ts', 'tailwind.config.js', 'src/**') }}
+          restore-keys: |
+            ${{ runner.os }}-remotion-
+
       - name: Prepare stats input
         run: yarn prepare:stats
         env:
@@ -56,6 +67,9 @@ jobs:
 
       - name: Render WebP and GIF assets
         run: yarn render:all
+        env:
+          RENDER_CARD_CONCURRENCY: 2
+          REMOTION_CONCURRENCY: 4
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
