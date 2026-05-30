@@ -1,57 +1,33 @@
-import {AbsoluteFill, interpolate, useCurrentFrame} from 'remotion';
-import {Config, UserStats} from '../../config';
-import {Languages} from '../../Languages';
-import {percentage} from '../../functions/utils';
-
-const {FPS} = Config;
-
-function interpolateFactory(
-	frame: number,
-	delayInSeconds: number,
-	durationInSeconds: number,
-	finalOpacity: number = 1
-) {
-	const delay = delayInSeconds * FPS;
-	const duration = durationInSeconds * FPS + delay;
-	return interpolate(frame, [delay, duration], [0, finalOpacity], {
-		extrapolateLeft: 'clamp',
-		extrapolateRight: 'clamp',
-	});
-}
+import {UserStats} from '../../config';
+import {Panel, ProgressBar} from './CardPrimitives';
 
 export function LanguagesContent({userStats}: {userStats: UserStats}) {
-	const frame = useCurrentFrame();
+	const languages = userStats.topLanguages.slice(0, 6);
 
 	return (
-		<AbsoluteFill className="bg-transparent p-1">
-			<div className="bg-[#282a36] font-mono rounded-xl p-2 shadow-2xl  h-full">
-				<div
-					style={{opacity: interpolateFactory(frame, 1 / 5, 1)}}
-					className="bg-white rounded-lg grow h-full shadow-2xl"
-				>
-					<div className="grid grid-rows-3 grid-cols-3 gap-2">
-						{userStats.topLanguages.slice(0, 9).map((lang, i) => (
-							<div
-								key={`${lang.languageName}`}
-								style={{
-									opacity: interpolateFactory(frame, (i + 1) / 5, 1),
-								}}
-							>
-								<p
-									className={`text-md ${
-										Languages[lang.languageName].color
-									} font-bold text-center`}
-								>
-									{lang.languageName}
-								</p>
-								<p className="text-black text-sm font-bold text-center my-0">
-									{percentage(lang.value, userStats.codeByteTotal).toFixed(1)}%
-								</p>
-							</div>
-						))}
+		<Panel
+			title="Language Mix"
+			subtitle={`${userStats.summary.languageCount} languages detected`}
+		>
+			<div className="grid grid-cols-2 gap-3">
+				{languages.map((language) => (
+					<div key={language.languageName}>
+						<div className="mb-1 flex items-center justify-between gap-2">
+							<p className="truncate text-xs font-semibold">
+								{language.languageName}
+							</p>
+							<p className="text-xs text-[#8b949e]">
+								{(language.percentage || 0).toFixed(1)}%
+							</p>
+						</div>
+						<ProgressBar
+							value={language.percentage || 0}
+							max={100}
+							color={language.color || '#58a6ff'}
+						/>
 					</div>
-				</div>
+				))}
 			</div>
-		</AbsoluteFill>
+		</Panel>
 	);
 }

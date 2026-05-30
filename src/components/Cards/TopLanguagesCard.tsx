@@ -1,30 +1,36 @@
-import { useCurrentFrame } from 'remotion';
-import { UserStats } from '../../config';
-import { formatBytes } from '../../functions/utils';
-import { fadeInAndSlideUp } from '../../functions/animations';
+import {UserStats} from '../../config';
+import {formatBytes} from '../../functions/utils';
+import {Panel, ProgressBar} from './CardPrimitives';
 
-export function TopLanguagesCard({ userStats }: { userStats: UserStats }) {
-  const frame = useCurrentFrame();
+export function TopLanguagesCard({userStats}: {userStats: UserStats}) {
+	const languages = userStats.topLanguages.slice(0, 8);
+	const maxBytes = Math.max(1, ...languages.map((language) => language.value));
 
-  return (
-    <div
-      className="bg-[#282a36] text-[#f8f8f2] rounded-lg p-4 shadow-lg text-white w-full"
-      style={fadeInAndSlideUp(frame)}
-    >
-      <h2 className="text-xl font-semibold mb-2 opacity-80">Top Languages</h2>
-      <div className="grid grid-cols-2 gap-1">
-        {userStats.topLanguages.slice(0, 8).map((lang, index) => (
-          <div
-            key={lang.languageName}
-            className="flex items-center p-2 bg-gray-700 rounded-lg"
-            style={fadeInAndSlideUp(frame - (index * 2))}
-          >
-            <div className={`w-4 h-4 rounded-full mr-2`} style={{ backgroundColor: `hsl(${index * 60}, 70%, 50%)` }}></div>
-            <span className="text-sm flex-grow">{lang.languageName}</span>
-            <span className="text-sm font-semibold">{formatBytes(lang.value)}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-} 
+	return (
+		<Panel
+			title="Top Languages"
+			subtitle={formatBytes(userStats.code.codeByteTotal)}
+		>
+			<div className="space-y-1.5">
+				{languages.map((language) => (
+					<div
+						key={language.languageName}
+						className="grid grid-cols-[95px_1fr_82px] items-center gap-2"
+					>
+						<p className="truncate text-xs font-semibold">
+							{language.languageName}
+						</p>
+						<ProgressBar
+							value={language.value}
+							max={maxBytes}
+							color={language.color || '#58a6ff'}
+						/>
+						<p className="text-right text-[11px] text-[#8b949e]">
+							{formatBytes(language.value)}
+						</p>
+					</div>
+				))}
+			</div>
+		</Panel>
+	);
+}

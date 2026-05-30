@@ -1,6 +1,9 @@
 node_modules
 dist
+build
+out
+public
+pages
+input.generated.json
 .DS_Store
 .env
-
-

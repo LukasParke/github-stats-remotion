@@ -45,11 +45,25 @@ export const formatBytes = (bytes: number): string => {
 	const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
 	if (bytes === 0) return '0 Byte';
 	const i = Math.floor(Math.log(bytes) / Math.log(1024));
-	return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${sizes[i]}`;
+	return `${(bytes / 1024 ** i).toFixed(2)} ${sizes[i]}`;
   };
+
+export function formatCompactNumber(value: number): string {
+	return new Intl.NumberFormat('en', {
+		notation: 'compact',
+		maximumFractionDigits: 1,
+	}).format(value);
+}
+
+export function formatInteger(value: number): string {
+	return new Intl.NumberFormat('en').format(value);
+}
   
 
 export function percentage(partialValue: number, totalValue: number) {
+	if (totalValue === 0) {
+		return 0;
+	}
 	return (100 * partialValue) / totalValue;
 }
 

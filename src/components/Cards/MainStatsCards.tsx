@@ -1,15 +1,51 @@
-import { UserStats } from '../../config';
-import { StatCard } from '../Effects/StatCard';
+import {UserStats} from '../../config';
+import {StatCard} from '../Effects/StatCard';
 
-export function MainStatsCards({ userStats }: { userStats: UserStats }) {
-  return (
-    <div className="grid grid-cols-3 gap-6 text-white">
-      <StatCard title="Total Stars" value={userStats.starCount} gradient="bg-gradient-to-br from-yellow-400/10 to-orange-500/10" delay={0} />
-      <StatCard title="Total Forks" value={userStats.forkCount} gradient="bg-gradient-to-br from-green-400/10 to-blue-500/10" delay={0.5} />
-      <StatCard title="Repo Views" value={userStats.repoViews} gradient="bg-gradient-to-br from-purple-400/10 to-pink-500/10" delay={1} />
-      <StatCard title="Total Commits" value={userStats.totalCommits} gradient="bg-gradient-to-br from-red-400/10 to-yellow-500/10" delay={1.5} />
-      <StatCard title="Pull Requests" value={userStats.totalPullRequests} gradient="bg-gradient-to-br from-blue-400/10 to-indigo-500/10" delay={2} />
-      <StatCard title="Contributions" value={userStats.totalContributions} gradient="bg-gradient-to-br from-green-400/10 to-teal-500/10" delay={2.5} />
-    </div>
-  );
-} 
+export function MainStatsCards({userStats}: {userStats: UserStats}) {
+	return (
+		<div className="grid h-full grid-cols-3 grid-rows-2 gap-3 text-white">
+			<StatCard
+				title="Contributions"
+				value={userStats.summary.totalContributions}
+				detail={`${userStats.summary.currentStreak} day streak`}
+				accent="#3fb950"
+				delay={0}
+			/>
+			<StatCard
+				title="Stars"
+				value={userStats.summary.starsReceived}
+				detail="received"
+				accent="#f2cc60"
+				delay={3}
+			/>
+			<StatCard
+				title="Repos"
+				value={userStats.summary.totalRepos}
+				detail={`${userStats.summary.activeRepos} active`}
+				accent="#58a6ff"
+				delay={6}
+			/>
+			<StatCard
+				title="Pull Requests"
+				value={userStats.community.totalPullRequests}
+				detail={`${userStats.community.totalPullRequestReviews} reviews`}
+				accent="#bc8cff"
+				delay={9}
+			/>
+			<StatCard
+				title="Languages"
+				value={userStats.summary.languageCount}
+				detail={userStats.topLanguages[0]?.languageName}
+				accent="#ff7b72"
+				delay={12}
+			/>
+			<StatCard
+				title="Repo Views"
+				value={userStats.repositories.repoViews}
+				detail="14 day traffic"
+				accent="#39c5cf"
+				delay={15}
+			/>
+		</div>
+	);
+}

@@ -1,75 +1,69 @@
-import { AbsoluteFill, useCurrentFrame } from 'remotion';
-import { UserStats } from '../../config';
-import { interpolateFactory } from '../../functions/utils';
-import Close from '../SVGs/close';
-import Commit from '../SVGs/commit';
-import Contribution from '../SVGs/contribution';
-import Fork from '../SVGs/fork';
-import Open from '../SVGs/open';
-import PlusMinus from '../SVGs/plusminus';
-import PullRequest from '../SVGs/pull-request';
-import Star from '../SVGs/star';
-import View from '../SVGs/view';
-import { AnimatedCounter } from '../Effects/AnimatedCounter';
+import {
+	BookOpen,
+	Code2,
+	GitCommitHorizontal,
+	GitPullRequest,
+	Sparkles,
+	Telescope,
+} from 'lucide-react';
+import {UserStats} from '../../config';
+import {MetricRow, Panel} from './CardPrimitives';
 
-export function Stats({ userStats }: { userStats: UserStats }) {
-	const frame = useCurrentFrame();
-
-	const firstFields: {
-		icon?;
-		label: string;
-		value: number;
-	}[] = [
-			{
-				icon: Star,
-				label: 'Stars',
-				value: userStats.starCount,
-			},
-			{ icon: Fork, label: 'Forks', value: userStats.forkCount },
-			{ icon: Commit, label: 'Commits', value: userStats.totalCommits },
-			{
-				icon: PullRequest,
-				label: 'Pull Requests',
-				value: userStats.totalPullRequests,
-			},
-			{ icon: Open, label: 'Opened Issues', value: userStats.openIssues },
-			{ icon: Close, label: 'Closed Issues', value: userStats.closedIssues },
-			{ icon: View, label: 'Repo Views (2 wks)', value: userStats.repoViews },
-			{
-				icon: PlusMinus,
-				label: 'Lines of code changed',
-				value: userStats.linesOfCodeChanged,
-			},
-			{
-				icon: Contribution,
-				label: 'Total contributions',
-				value: userStats.totalContributions,
-			},
-		];
+export function Stats({userStats}: {userStats: UserStats}) {
+	const rows = [
+		{
+			icon: <Sparkles size={16} />,
+			label: 'Stars received',
+			value: userStats.summary.starsReceived,
+		},
+		{
+			icon: <GitCommitHorizontal size={16} />,
+			label: 'Profile commits',
+			value: userStats.contributions.totalCommits,
+		},
+		{
+			icon: <GitPullRequest size={16} />,
+			label: 'Pull requests',
+			value: userStats.community.totalPullRequests,
+		},
+		{
+			icon: <BookOpen size={16} />,
+			label: 'Public repositories',
+			value: userStats.repositories.publicRepos || userStats.repositories.totalRepos,
+		},
+		{
+			icon: <Code2 size={16} />,
+			label: 'Languages',
+			value: userStats.summary.languageCount,
+		},
+		{
+			icon: <Telescope size={16} />,
+			label: 'Repo views',
+			value: userStats.repositories.repoViews,
+			detail: 'Last 14 days when traffic is available',
+		},
+	];
 
 	return (
-		<AbsoluteFill className="bg-transparent p-1">
-			<div className="bg-[#282a36] p-3 text-[#f8f8f2] h-full font-mono rounded-xl shadow-2xl">
-				<div className="flex flex-col justify-between h-full">
-					{firstFields.map((field, i) => (
-						<div
-							key={`${field.label}`}
-							className="flex flex-row justify-between gap-2"
-							style={{ opacity: interpolateFactory(frame, i / 5, 1) }}
-						>
-							<div className="flex gap-2">
-								{field.icon && <field.icon className="w-5 h-5" />}
-								<p className="text-sm whitespace-nowrap my-auto">
-									{field.label}:
-								</p>
-							</div>
-							<p className="text-start text-sm my-auto">
-								<AnimatedCounter value={field.value} duration={3} startFrame={(i + 1) * 5} />
-							</p>
+		<Panel
+			title="GitHub Stats"
+			subtitle={userStats.isComplete ? 'Current collection' : 'Core complete, optional backfill pending'}
+		>
+			<div className="space-y-0">
+				{rows.map((row, index) => (
+					<div key={row.label} className="flex items-center gap-2">
+						<div className="text-[#58a6ff]">{row.icon}</div>
+						<div className="min-w-0 flex-1">
+							<MetricRow
+								label={row.label}
+								value={row.value}
+								detail={row.detail}
+								delay={index * 0.08}
+							/>
 						</div>
-					))}
-				</div>
+					</div>
+				))}
 			</div>
-		</AbsoluteFill>
+		</Panel>
 	);
 }

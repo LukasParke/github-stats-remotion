@@ -7,18 +7,13 @@
 	],
 	"scripts": {
 		"start": "remotion studio --props ./input.json",
-		"render": "yarn render:stats && yarn render:languages && yarn render:readme && yarn render:main-stats && yarn render:issue-tracking && yarn render:code-metrics && yarn render:activity-overview && yarn render:commit-streak && yarn render:top-languages",
-		"render:stats": "remotion render --props ./input.json stats out/stats.gif",
-		"render:languages": "remotion render --props ./input.json languages out/languages.gif",
-		"render:readme": "remotion render --props ./input.json readme out/readme.gif",
-		"render:main-stats": "remotion render --props ./input.json main-stats out/main-stats.gif",
-		"render:issue-tracking": "remotion render --props ./input.json issue-tracking out/issue-tracking.gif",
-		"render:code-metrics": "remotion render --props ./input.json code-metrics out/code-metrics.gif",
-		"render:activity-overview": "remotion render --props ./input.json activity-overview out/activity-overview.gif",
-		"render:commit-streak": "remotion render --props ./input.json commit-streak out/commit-streak.gif",
-		"render:top-languages": "remotion render --props ./input.json top-languages out/top-languages.gif",
+		"prepare:stats": "node scripts/prepare-stats.mjs",
+		"render": "yarn render:all",
+		"render:all": "node scripts/render-assets.mjs --formats=webp,gif",
+		"render:webp": "node scripts/render-assets.mjs --formats=webp",
+		"render:gif": "node scripts/render-assets.mjs --formats=gif",
 		"upgrade": "remotion upgrade",
-		"test": "eslint src --ext ts,tsx,js,jsx && tsc"
+		"test": "ESLINT_USE_FLAT_CONFIG=false eslint src --ext ts,tsx,js,jsx && tsc"
 	},
 	"repository": {},
 	"license": "MIT",
@@ -42,7 +37,7 @@
 		"@remotion/tailwind": "^4.0.214",
 		"@types/react": "^18.3.10",
 		"@types/web": "^0.0.167",
-		"eslint": "^9.11.1",
+		"eslint": "^8.57.1",
 		"prettier": "^3.3.3",
 		"typescript": "^5.6.2"
 	},

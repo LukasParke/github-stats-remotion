@@ -1,40 +1,54 @@
-import { motion } from 'framer-motion';
-import { UserStats } from '../../config';
-import { AnimatedCounter } from '../Effects/AnimatedCounter';
-import { useCurrentFrame } from 'remotion';
-import { fadeInAndSlideUp } from '../../functions/animations';
+import {UserStats} from '../../config';
+import {MetricRow, Panel, ProgressBar} from './CardPrimitives';
 
-export function IssueTrackingCard({ userStats }: { userStats: UserStats }) {
-  const frame = useCurrentFrame();
+export function IssueTrackingCard({userStats}: {userStats: UserStats}) {
+	const opened = userStats.community.openIssues;
+	const closed = userStats.community.closedIssues;
+	const total = opened + closed;
 
-  return (
-    <div
-      className="bg-[#282a36] text-[#f8f8f2] rounded-lg p-4 shadow-lg w-full"
-      style={fadeInAndSlideUp(frame)}
-    >
-      <h2 className="text-xl font-semibold mb-4 opacity-80">Issue Tracking</h2>
-      <div className="flex justify-between mb-2">
-        <span className="opacity-80">Issues Opened:</span>
-        <span className="font-semibold"><AnimatedCounter value={userStats.openIssues} duration={3} /></span>
-      </div>
-      <div className="flex justify-between mb-2">
-        <span className="opacity-80">Issues Closed:</span>
-        <span className="font-semibold"><AnimatedCounter value={userStats.closedIssues} duration={3} delay={1} /></span>
-      </div>
-      <div className="w-full bg-gray-700 rounded-full h-2.5 mt-2 flex">
-        <div
-          className="bg-green-600 h-2.5 rounded-l-full"
-          style={{ width: `${(userStats.closedIssues / (userStats.openIssues + userStats.closedIssues) > 0 ? (userStats.closedIssues / (userStats.openIssues + userStats.closedIssues)) * 100 : 0)}%` }}
-        ></div>
-        <div
-          className="bg-red-600 h-2.5 rounded-r-full"
-          style={{ width: `${(userStats.openIssues / (userStats.openIssues + userStats.closedIssues) > 0 ? (userStats.openIssues / (userStats.openIssues + userStats.closedIssues)) * 100 : 0)}%` }}
-        ></div>
-      </div>
-      <div className="flex justify-between text-xs mt-1">
-        <span>Closed</span>
-        <span>Open</span>
-      </div>
-    </div>
-  );
-} 
+	return (
+		<Panel
+			title="Community Work"
+			subtitle={`${userStats.community.repositoriesContributedTo} repositories contributed to`}
+		>
+			<div className="grid grid-cols-[1fr_1fr] gap-4">
+				<div className="space-y-1">
+					<MetricRow label="Pull requests" value={userStats.community.totalPullRequests} />
+					<MetricRow
+						label="PR reviews"
+						value={userStats.community.totalPullRequestReviews}
+						delay={0.1}
+					/>
+					<MetricRow
+						label="Discussions"
+						value={
+							userStats.community.discussionsStarted +
+							userStats.community.discussionsAnswered
+						}
+						detail={`${userStats.community.discussionsAnswered} answered`}
+						delay={0.2}
+					/>
+				</div>
+				<div className="space-y-2">
+					<div className="rounded-lg border border-white/10 bg-white/[0.03] p-3">
+						<div className="flex items-center justify-between">
+							<p className="text-xs text-[#8b949e]">Issues closed</p>
+							<p className="text-sm font-semibold">{closed}</p>
+						</div>
+						<div className="mt-2">
+							<ProgressBar value={closed} max={Math.max(1, total)} color="#3fb950" />
+						</div>
+						<p className="mt-2 text-[11px] text-[#8b949e]">
+							{opened} open, {closed} closed
+						</p>
+					</div>
+					<MetricRow
+						label="Followers"
+						value={userStats.community.followers}
+						detail={`${userStats.community.following} following`}
+					/>
+				</div>
+			</div>
+		</Panel>
+	);
+}

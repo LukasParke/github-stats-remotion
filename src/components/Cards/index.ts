@@ -1,19 +1,20 @@
-import { ComponentType } from 'react';
-import { MainProps } from '../../config';
-import { ActivityOverviewCard } from './ActivityOverviewCard';
-import { CodeMetricsCard } from './CodeMetricsCard';
-import { CommitStreakCard } from './CommitStreakCard';
-import { IssueTrackingCard } from './IssueTrackingCard';
-import { LanguagesContent } from './LanguagesContent';
-import { MainStatsCards } from './MainStatsCards';
-import { ReadmeCard } from './ReadmeCard';
-import { Stats } from './Stats';
-import { TopLanguagesCard } from './TopLanguagesCard';
+import {ComponentType} from 'react';
+import {MainProps} from '../../config';
+import {ActivityOverviewCard} from './ActivityOverviewCard';
+import {CodeMetricsCard} from './CodeMetricsCard';
+import {CommitStreakCard} from './CommitStreakCard';
+import {IssueTrackingCard} from './IssueTrackingCard';
+import {LanguagesContent} from './LanguagesContent';
+import {MainStatsCards} from './MainStatsCards';
+import {ReadmeCard} from './ReadmeCard';
+import {RepositoryImpactCard} from './RepositoryImpactCard';
+import {Stats} from './Stats';
+import {TopLanguagesCard} from './TopLanguagesCard';
 export type CardConfig = {
-  id: string;
-  component: ComponentType<{ userStats: MainProps['userStats'] }>;
-  height: number;
-  width?: number;
+	id: string;
+	component: ComponentType<{userStats: MainProps['userStats']}>;
+	height: number;
+	width?: number;
 };
 
 export const cards: CardConfig[] = [
@@ -36,6 +37,11 @@ export const cards: CardConfig[] = [
     id: 'main-stats',
     component: MainStatsCards,
     height: 273,
+  },
+  {
+    id: 'repo-impact',
+    component: RepositoryImpactCard,
+    height: 190,
   },
   {
     id: 'issue-tracking',

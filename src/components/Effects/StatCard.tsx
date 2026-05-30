@@ -1,22 +1,47 @@
-import { useCurrentFrame } from 'remotion';
-import { fadeInAndSlideUp } from '../../functions/animations';
-import { AnimatedCounter } from './AnimatedCounter';
+import {useCurrentFrame} from 'remotion';
+import {fadeInAndSlideUp} from '../../functions/animations';
+import {formatCompactNumber} from '../../functions/utils';
+import {AnimatedCounter} from './AnimatedCounter';
 
-export const StatCard = ({ title, value, duration = 3, gradient, delay }) => {
-  const frame = useCurrentFrame();
+type StatCardProps = {
+	title: string;
+	value: number;
+	detail?: string;
+	accent?: string;
+	delay?: number;
+	compact?: boolean;
+};
 
-  return (
-    <div
-      className={`bg-[#282a36] text-[#f8f8f2] rounded-lg p-4 shadow-lg ${gradient} flex flex-col h-[120px]`}
-      style={fadeInAndSlideUp(frame, delay)}
-      aria-label={`${title}: ${value}`}
-    >
-      <h3 className="text-sm whitespace-nowrap font-semibold opacity-80">{title}</h3>
-      <div className="flex-grow flex items-center">
-        <p className="text-3xl font-bold">
-          <AnimatedCounter value={value} duration={duration + delay} />
-        </p>
-      </div>
-    </div>
-  );
-}; 
+export const StatCard = ({
+	title,
+	value,
+	detail,
+	accent = '#60a5fa',
+	delay = 0,
+	compact = false,
+}: StatCardProps) => {
+	const frame = useCurrentFrame();
+
+	return (
+		<div
+			className="flex h-full flex-col justify-between rounded-lg border border-white/10 bg-[#161b22] p-3 text-[#f0f3f6] shadow-lg"
+			style={{
+				...fadeInAndSlideUp(frame, delay),
+				borderTopColor: accent,
+			}}
+			aria-label={`${title}: ${value}`}
+		>
+			<h3 className="text-xs font-semibold uppercase tracking-normal text-[#8b949e]">
+				{title}
+			</h3>
+			<p className={compact ? 'text-2xl font-bold' : 'text-3xl font-bold'}>
+				{compact ? (
+					formatCompactNumber(value)
+				) : (
+					<AnimatedCounter value={value} duration={2} delay={delay} />
+				)}
+			</p>
+			{detail ? <p className="text-[11px] text-[#8b949e]">{detail}</p> : null}
+		</div>
+	);
+};

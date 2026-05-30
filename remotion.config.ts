@@ -9,7 +9,7 @@ import {Config} from '@remotion/cli/config';
 import {webpackOverride} from './src/webpack-override';
 
 // Config.setConcurrency(30);
-Config.setScale(2);
+Config.setScale(1);
 Config.setCodec('gif');
 Config.setVideoImageFormat('png');
 Config.setNumberOfGifLoops(0);
