@@ -252,42 +252,6 @@ export function ProgressBar({
 	);
 }
 
-export function StatusPill({
-	children,
-	accent = theme.green,
-}: {
-	children: ReactNode;
-	accent?: string;
-}) {
-	return (
-		<span
-			className="inline-flex items-center rounded-full border px-2 py-1 text-[10px] font-semibold uppercase leading-none tracking-normal"
-			style={{
-				borderColor: `${accent}55`,
-				backgroundColor: `${accent}18`,
-				color: '#f0f3f6',
-			}}
-		>
-			{children}
-		</span>
-	);
-}
-
-export function formatDisplayDate(date: string) {
-	if (!date) {
-		return '';
-	}
-	const parsed = new Date(date);
-	if (Number.isNaN(parsed.getTime())) {
-		return date;
-	}
-	return parsed.toLocaleDateString('en', {
-		month: 'short',
-		day: 'numeric',
-		year: 'numeric',
-	});
-}
-
 export function labelNumber(value: number) {
 	return formatInteger(value);
 }

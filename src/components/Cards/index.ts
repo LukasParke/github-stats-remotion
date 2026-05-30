@@ -1,5 +1,5 @@
 import {ComponentType} from 'react';
-import {MainProps} from '../../config';
+import {FPS, MainProps} from '../../config';
 import {ActivityOverviewCard} from './ActivityOverviewCard';
 import {CodeMetricsCard} from './CodeMetricsCard';
 import {CommitStreakCard} from './CommitStreakCard';
@@ -14,6 +14,7 @@ export type CardConfig = {
 	id: string;
 	component: ComponentType<{userStats: MainProps['userStats']}>;
 	height: number;
+	durationInFrames?: number;
 	width?: number;
 };
 
@@ -34,6 +35,7 @@ export const cards: CardConfig[] = [
 		component: ReadmeSpotlightCard,
 		width: 900,
 		height: 460,
+		durationInFrames: FPS * 12,
 	},
 	{
 		id: 'stats',

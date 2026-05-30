@@ -11,7 +11,7 @@ const {FPS, DurationInFrames} = Config;
 
 export const RemotionRoot = () => {
 	const calculateMetadata: CalculateMetadataFunction<MainProps> = async (
-		props
+		props,
 	) => {
 		const inputProps = getInputProps() as SourceProps;
 		const userStats = await getUserStats(inputProps);
@@ -26,26 +26,34 @@ export const RemotionRoot = () => {
 
 	return (
 		<>
-			{cards.map(({id, component: Component, height, width = 500}) => (
-				<Composition
-					key={id}
-					id={id}
-					component={(props) => (
-						<Card userStats={props.userStats}>
-							<Component userStats={props.userStats} />
-						</Card>
-					)}
-					durationInFrames={DurationInFrames}
-					fps={FPS}
-					width={width}
-					height={height}
-					schema={mainSchema}
-					calculateMetadata={calculateMetadata}
-					defaultProps={{
-						userStats: defaultStats,
-					}}
-				/>
-			))}
+			{cards.map(
+				({
+					id,
+					component: Component,
+					height,
+					width = 500,
+					durationInFrames = DurationInFrames,
+				}) => (
+					<Composition
+						key={id}
+						id={id}
+						component={(props) => (
+							<Card userStats={props.userStats}>
+								<Component userStats={props.userStats} />
+							</Card>
+						)}
+						durationInFrames={durationInFrames}
+						fps={FPS}
+						width={width}
+						height={height}
+						schema={mainSchema}
+						calculateMetadata={calculateMetadata}
+						defaultProps={{
+							userStats: defaultStats,
+						}}
+					/>
+				),
+			)}
 		</>
 	);
 };

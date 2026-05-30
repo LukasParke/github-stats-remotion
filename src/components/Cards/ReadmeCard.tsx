@@ -1,5 +1,4 @@
 import {
-	Activity,
 	ArrowDownFromLine,
 	ArrowUpFromLine,
 	Code2,
@@ -9,7 +8,6 @@ import {
 	GitPullRequest,
 	HandHeart,
 	MapPin,
-	ShieldCheck,
 	Sparkles,
 	Telescope,
 } from 'lucide-react';
@@ -18,12 +16,7 @@ import {UserStats} from '../../config';
 import {formatBytes, formatCompactNumber} from '../../functions/utils';
 import {AnimatedCounter} from '../Effects/AnimatedCounter';
 import {GeminiBeams} from '../Effects/GeminiBeams';
-import {
-	formatDisplayDate,
-	ProgressBar,
-	StatusPill,
-	theme,
-} from './CardPrimitives';
+import {ProgressBar, theme} from './CardPrimitives';
 
 type ReadmeVariantProps = {
 	userStats: UserStats;
@@ -40,9 +33,6 @@ type ReadmeMetric = {
 export function ReadmeCard({userStats}: ReadmeVariantProps) {
 	const frame = useCurrentFrame();
 	const topLanguage = userStats.topLanguages[0];
-	const statusText = userStats.isComplete
-		? 'Complete'
-		: `${userStats.collectionStatus.backfillPending} pending`;
 	const profileSlide = interpolate(frame, [0, 38], [18, 0], {
 		easing: Easing.bezier(0.22, 1, 0.36, 1),
 		extrapolateRight: 'clamp',
@@ -120,22 +110,6 @@ export function ReadmeCard({userStats}: ReadmeVariantProps) {
 							delay={0.24}
 						/>
 					</div>
-
-					<div className="flex flex-wrap items-center gap-2">
-						<StatusPill accent={theme.green}>
-							<ShieldCheck size={11} className="mr-1" />
-							Public safe
-						</StatusPill>
-						<StatusPill accent={theme.cyan}>
-							<Activity size={11} className="mr-1" />
-							Updated {formatDisplayDate(userStats.summary.refreshedAt)}
-						</StatusPill>
-						<StatusPill accent={theme.purple}>
-							{userStats.schemaVersion
-								? `Schema v${userStats.schemaVersion}`
-								: 'Legacy stats'}
-						</StatusPill>
-					</div>
 				</div>
 
 				<div className="grid min-w-0 grid-rows-[1fr_142px] gap-3">
@@ -178,37 +152,34 @@ export function ReadmeCard({userStats}: ReadmeVariantProps) {
 					</div>
 
 					<div className="rounded-xl border border-white/10 bg-white/[0.045] p-4">
-						<div className="mb-3">
-							<p className="truncate text-xs font-semibold uppercase tracking-normal text-[#9ba7b4]">
-								Collection status
-							</p>
-							<p className="mt-1 truncate text-sm text-[#f0f3f6]">
-								Optional metrics: {statusText}
-							</p>
-							<p className="mt-1 truncate text-xs text-[#8b949e]">
-								{userStats.privacy.redactedPrivateRepositories} private repos
-								redacted
-							</p>
+						<div className="mb-3 flex items-start justify-between gap-4">
+							<div className="min-w-0">
+								<p className="truncate text-xs font-semibold uppercase tracking-normal text-[#9ba7b4]">
+									Code footprint
+								</p>
+								<p className="mt-1 truncate text-sm text-[#f0f3f6]">
+									{formatBytes(userStats.code.codeByteTotal)} across{' '}
+									{userStats.summary.languageCount} languages
+								</p>
+							</div>
+							<div className="shrink-0 text-right">
+								<p className="text-xs font-semibold uppercase tracking-normal text-[#9ba7b4]">
+									Active repos
+								</p>
+								<p className="mt-1 text-xl font-black leading-none text-[#58a6ff]">
+									{formatCompactNumber(userStats.summary.activeRepos)}
+								</p>
+							</div>
 						</div>
 						<ProgressBar
-							value={
-								userStats.collectionStatus.backfillCompletedThisRun +
-								userStats.code.contributorReposCompleted +
-								userStats.repositories.trafficReposCompleted
-							}
-							max={
-								userStats.collectionStatus.backfillPending +
-								userStats.collectionStatus.backfillCompletedThisRun +
-								userStats.code.contributorReposCompleted +
-								userStats.repositories.trafficReposCompleted +
-								1
-							}
-							color={theme.cyan}
+							value={topLanguage?.percentage || 0}
+							max={100}
+							color={topLanguage?.color || theme.cyan}
 							height={10}
 						/>
 						<p className="mt-3 truncate text-xs text-[#8b949e]">
-							{formatBytes(userStats.code.codeByteTotal)} indexed across{' '}
-							{userStats.summary.languageCount} languages
+							{topLanguage?.languageName || 'Top language'} leads with{' '}
+							{(topLanguage?.percentage || 0).toFixed(1)}% of indexed code
 						</p>
 					</div>
 				</div>
@@ -306,6 +277,7 @@ export function ReadmeSpotlightCard({userStats}: ReadmeVariantProps) {
 				className="left-[8%] top-[-22%] h-[122%] w-[110%] opacity-60"
 				rotate={2}
 				scale={1.08}
+				speed={0.72}
 			/>
 			<div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,10,16,0.42),rgba(7,10,16,0.96)_72%)]" />
 			<div className="relative z-10 grid h-full grid-cols-[310px_1fr] gap-5 p-6">

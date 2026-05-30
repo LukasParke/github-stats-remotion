@@ -28,19 +28,22 @@ export function GeminiBeams({
 	rotate = 0,
 	scale = 1,
 	opacity = 1,
+	speed = 1,
 }: {
 	className?: string;
 	rotate?: number;
 	scale?: number;
 	opacity?: number;
+	speed?: number;
 }) {
 	const frame = useCurrentFrame();
-	const draw = interpolate(frame, [0, 72], [0.02, 1], {
+	const animatedFrame = frame * speed;
+	const draw = interpolate(animatedFrame, [0, 72], [0.02, 1], {
 		easing: Easing.bezier(0.22, 1, 0.36, 1),
 		extrapolateLeft: 'clamp',
 		extrapolateRight: 'clamp',
 	});
-	const shimmer = interpolate(frame % 96, [0, 48, 96], [0.72, 1, 0.72]);
+	const shimmer = interpolate(animatedFrame % 96, [0, 48, 96], [0.72, 1, 0.72]);
 
 	return (
 		<AbsoluteFill
