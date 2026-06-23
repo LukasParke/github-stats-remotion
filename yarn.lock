@@ -3749,10 +3749,15 @@ regexp.prototype.flags@^1.5.2, regexp.prototype.flags@^1.5.3:
     es-errors "^1.3.0"
     set-function-name "^2.0.2"
 
-remotion@4.0.229, remotion@^4.0.214:
+remotion@4.0.229:
   version "4.0.229"
   resolved "https://registry.yarnpkg.com/remotion/-/remotion-4.0.229.tgz#d0d9995df1f8e631b475ad24b98d1adaa833b264"
   integrity sha512-0M+Q+WgbXZhz325huvS64y+ySWgYDlgtHPKCH/A40bz7B/cPeIDHnR5U8daXjrD2nEj8GR/p0DlkCwJgZ8QYZg==
+
+remotion@^4.0.214:
+  version "4.0.410"
+  resolved "https://registry.yarnpkg.com/remotion/-/remotion-4.0.410.tgz#746a34dbb3f7bfa965d6a1fd5964a6b6bf4bf469"
+  integrity sha512-qk1IRV3hSm67Bgt3yIgrNmuAE5XJRIft3t40gGbkV+H98Ob0NYHBtkJBjlkz0I1ysC7eTP6iOkPUHLDzUA1D3Q==
 
 resolve-from@^4.0.0:
   version "4.0.0"
